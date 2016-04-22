@@ -7,11 +7,12 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", "1024"]
   end
 
+  #ruby 1.8 on cent6 cworks with 1.1.0
   config.vm.provision :shell, :inline => <<-EOH
     rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
     yum install -y puppet
-    gem install inifile --no-ri --no-rdoc
     echo "gem: --no-ri --no-rdoc" > ~/.gemrc
+    gem install inifile --version 1.1.0 --no-ri --no-rdoc
   EOH
 
   config.vm.provision :puppet do |puppet|

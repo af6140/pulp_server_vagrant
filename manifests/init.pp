@@ -46,12 +46,7 @@
   package {'cyrus-sasl-plain':
    ensure => 'present',
   }
-  #package {'mongodb':
-  #        ensure => 'present',
-  #}
-  #package {'mongodb-server':
-  #  ensure => 'present',
-  #}
+
 
   class {'mongodb::globals':
     manage_package_repo => false,
