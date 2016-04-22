@@ -22,4 +22,8 @@ Vagrant.configure("2") do |config|
     puppet.options = "--debug"
   end
 
+  config.vm.provision :shell, :inline => <<-EOH
+    echo `facter ipaddress`  `facter fqdn' >> /etc/hosts
+  EOH
+
 end

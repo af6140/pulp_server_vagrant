@@ -86,6 +86,7 @@
   class{'::pulp::admin':
     enable_puppet => true,
     enable_docker => true,
+    verify_ssl => false,
   }
 
   Openssl::Certificate::X509[$pulpserver_hostname_ud] ->
