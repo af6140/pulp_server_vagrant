@@ -19,11 +19,11 @@ Vagrant.configure("2") do |config|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
     puppet.module_path    = "modules"
-    puppet.options = "--debug"
+    puppet.options = ""
   end
 
   config.vm.provision :shell, :inline => <<-EOH
-    echo `facter ipaddress`  `facter fqdn' >> /etc/hosts
+    echo $(facter ipaddress)  $(facter fqdn) >> /etc/hosts
   EOH
 
 end

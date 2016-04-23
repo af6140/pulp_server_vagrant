@@ -2,8 +2,8 @@
   $pulpserver_hostname =  $::fqdn
   $pulpserver_hostname_ud = regsubst($pulpserver_hostname, '\.', '_', 'G')
 
-  $ssl_cert_path = "/var/www/${pulpserver_hostname_ud}.crt"
-  $ssl_key_path = "/var/www/${pulpserver_hostname_ud}.key"
+  $ssl_cert_path = "/tmp/${pulpserver_hostname_ud}.crt"
+  $ssl_key_path = "/tmp/${pulpserver_hostname_ud}.key"
   yumrepo {'epel-release':
          ensure => 'present',
          baseurl => 'http://mirror.math.princeton.edu/pub/epel/$releasever/$basearch/',
@@ -20,7 +20,7 @@
   	locality => 'Detroit',
   	organization => 'Entertainment',
   	unit => 'Operation',
-  	base_dir => '/var/www',
+  	base_dir => '/tmp',
     require => Package['httpd'],
     key_owner => 'apache',
     key_group => 'apache',
@@ -89,10 +89,10 @@
     verify_ssl => false,
   }
 
-  Openssl::Certificate::X509[$pulpserver_hostname_ud] ->
   Yumrepo['epel-release'] ->
   Yumrepo['copr-qpid'] ->
   Yumrepo['pulp'] ->
+  Class['apache'] ->
   Package['qpid-tools'] ->
   Package['mongodb-server']
 
@@ -101,14 +101,16 @@
   Yumrepo['pulp'] -> Class['pulp::database']
   Yumrepo['pulp'] -> Class['pulp::broker']
   Yumrepo['pulp'] -> Class['pulp::install']
+  Yumrepo['pulp'] -> Class['pulp::admin::install']
 
 
   Package['cyrus-sasl-plain'] -> Class['pulp']
-  Yumrepo['copr-qpid'] -> Class['qpid::install']
-
   Class['mongodb::globals'] -> Class['pulp']
 
-  Yumrepo['pulp'] -> Class['pulp::admin::install']
+  Yumrepo['copr-qpid'] -> Class['qpid::install']
+
+
+
 
 
 
